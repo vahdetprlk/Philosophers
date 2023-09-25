@@ -4,8 +4,9 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = 	src/philo.c \
-		src/ft_calloc.c
+SRC=	src/ft_atoi.c \
+		src/ft_calloc.c \
+ 		src/philo.c
 
 OBJ = $(SRC:.c=.o)
 
