@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/25 18:05:52 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/09/25 19:45:03 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ int	main(int argc, char *argv[])
 {
 	int		i;
 	t_vars	*vars;
-
-	i = 0;
+ 
+	i = 1;
 	if (argc == 5 || argc == 6)
 	{
 		vars = &(t_vars){0};
 		ft_init_vars(vars, &argv[1]);
 		while (i < argc)
-
 		{
-			
+			printf("%d", ft_atoi(argv[i]));
+			i++;
 		}
 
 	}
