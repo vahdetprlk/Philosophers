@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/01 16:26:31 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/02 14:37:56 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_vars
 	int		t_to_sleep;
 	int		eat_per_phil;
 	t_philo	*philo;
-	int		i;
 }	t_vars;
 
 

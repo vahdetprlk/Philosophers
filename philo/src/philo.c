@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/01 16:27:13 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/02 14:45:59 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void	ft_init_vars(t_vars *vars, char **argv)
+int	ft_init_vars(t_vars *vars, char **argv)
 {
 	vars->n_of_philo = ft_atoi(argv[0]);
+	if (vars->n_of_philo < 1)
+		return (write(2, "Philosophers number should 1!\n", 42), 1);
 	vars->t_to_die = ft_atoi(argv[1]);
 	vars->t_to_eat = ft_atoi(argv[2]);
 	vars->t_to_sleep = ft_atoi(argv[3]);
@@ -39,7 +41,15 @@ int	ft_mutex_init(t_vars *vars)
 	return (0);
 }
 
+void	*ft_life_cycle(t_vars *vars)
+{
 
+}
+
+void	ft_philo_cycle(t_vars *vars)
+{
+	pthread_create(&vars );
+}
 
 int	main(int argc, char *argv[])
 {
@@ -54,8 +64,9 @@ int	main(int argc, char *argv[])
 		if (ft_mutex_init(vars))
 		{
 			free(vars->philo);
-			return(write(2, "Mutex Error!\n", 13), 1);
+			return (write(2, "Mutex Error!\n", 13), 1);
 		}
+		ft_philo_cycle(vars);
 		free(vars->philo);
 	}
 	else
