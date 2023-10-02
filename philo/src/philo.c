@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/02 15:55:59 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/02 18:00:23 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_init_vars(t_vars *vars, char **argv)
 {
 	vars->n_of_philo = ft_atoi(argv[0]);
 	if (vars->n_of_philo < 1)
-		return (write(2, "Philosophers number should 1!\n", 42), 1);
+		return (write(2, "Philosophers number should at least 1!\n", 42), 1);
 	vars->t_to_die = ft_atoi(argv[1]);
 	vars->t_to_eat = ft_atoi(argv[2]);
 	vars->t_to_sleep = ft_atoi(argv[3]);
@@ -35,7 +35,7 @@ int	ft_mutex_init(t_philo *philo)
 	{
 		if (pthread_mutex_init(&philo[i].mutex.mutex_id, NULL))
 			return (1);
-		philo[i].mutex.i_m = i;
+		philo[i].mutex.i_m = (i + 1);
 		i++;
 	}
 	return (0);
@@ -43,7 +43,26 @@ int	ft_mutex_init(t_philo *philo)
 
 void	*ft_life_cycle(t_philo *philo)
 {
-	printf("%d\n", philo->mutex.i_m);
+	pthread_mutex_lock(&philo->mutex.mutex_id);
+	if (philo->mutex.i_m != 1)
+		pthread_mutex_lock(&(--philo)->mutex.mutex_id);
+	else
+	{
+		philo += (philo->vars.n_of_philo - 1);
+		pthread_mutex_lock(&philo->mutex.mutex_id);
+	}
+	if (philo->mutex.i_m == philo->vars.n_of_philo)
+	{
+		pthread_mutex_unlock(&philo->mutex.mutex_id);
+		philo -= (philo->vars.n_of_philo - 1);
+		printf("benim idm'%d ben yedim\n", philo->mutex.i_m);
+	}
+	else
+	{
+		printf("benim idm'%d ben yedim\n", philo->mutex.i_m);
+		pthread_mutex_unlock(&(philo++)->mutex.mutex_id);
+	}
+	pthread_mutex_unlock(&philo->mutex.mutex_id);
 	return (NULL);
 }
 
@@ -79,6 +98,7 @@ int	main(int argc, char *argv[])
 			return (write(2, "Mutex Error!\n", 13), 1);
 		}
 		ft_philo_cycle(philo);
+		usleep(2000000000);
 		free(philo);
 	}
 	else
