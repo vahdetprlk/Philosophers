@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/02 14:37:56 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/02 15:47:38 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@ typedef struct s_mutex
 	int				i_m;
 }	t_mutex;
 
-typedef struct s_philo
-{
-	pthread_t	thread;
-	t_mutex		mutex;
-}	t_philo;
-
 typedef struct s_vars
 {
 	int		n_of_philo;
@@ -36,8 +30,14 @@ typedef struct s_vars
 	int		t_to_eat;
 	int		t_to_sleep;
 	int		eat_per_phil;
-	t_philo	*philo;
 }	t_vars;
+
+typedef struct s_philo
+{
+	pthread_t	thread;
+	t_mutex		mutex;
+	t_vars		vars;
+}	t_philo;
 
 
 void	*ft_calloc(size_t count, size_t size);
