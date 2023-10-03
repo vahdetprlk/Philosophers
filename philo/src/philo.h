@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/02 15:47:38 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/03 15:01:12 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stddef.h>
 # include <pthread.h>
+# include <sys/time.h>
 # include <stdio.h> // silinecek
 
 typedef struct s_mutex
@@ -34,9 +35,12 @@ typedef struct s_vars
 
 typedef struct s_philo
 {
-	pthread_t	thread;
-	t_mutex		mutex;
-	t_vars		vars;
+	pthread_t		thread;
+	t_mutex			mutex;
+	t_vars			vars;
+	struct timeval	time_start;
+	struct timeval	time_end;
+	int				current_time;
 }	t_philo;
 
 
