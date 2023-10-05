@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/04 17:49:46 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/05 11:52:44 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ int	ft_init_vars(t_vars *vars, char **argv)
 {
 	vars->n_of_philo = ft_atoi(argv[0]);
 	if (vars->n_of_philo < 1)
-		return (write(2, "Philosophers number should at least 1!\n", 42), 1);
+		return (write(2, "Philosophers number should at least 1.\n", 39), 1);
 	vars->t_to_die = 1000 * ft_atoi(argv[1]);
 	vars->t_to_eat = 1000 * ft_atoi(argv[2]);
 	vars->t_to_sleep = 1000 * ft_atoi(argv[3]);
-	vars->eat_per_phil = ft_atoi(argv[4]);
+	if (ft_atoi(argv[4]) == 0)
+		vars->eat_per_phil = -1;
+	else
+		vars->eat_per_phil = ft_atoi(argv[4]);
 	return (0);
 }
 
@@ -42,56 +45,75 @@ int	ft_mutex_init(t_philo *philo, t_vars vars_init)
 	return (0);
 }
 
-
+void	ft_current_time(t_philo *philo)
+{
+	gettimeofday(&philo->time_end, NULL);
+	philo->current_time = (philo->time_end.tv_sec * 1000 + philo->time_end.tv_usec / 1000) -
+		(philo->time_start.tv_sec * 1000 + philo->time_start.tv_usec / 1000);
+}
 
 void	ft_sleep(t_philo *philo)
 {
-	gettimeofday(&philo->time_end, NULL);
-	philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
+	ft_current_time(philo);
 	usleep(philo->vars.t_to_sleep);
-	printf("%d %d is sleeping.\n", philo->current_time, philo->mutex.i_m);
-	gettimeofday(&philo->time_end, NULL);
-	philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
-	printf("%d %d is thinking.\n", philo->current_time, philo->mutex.i_m);
+	printf("%d %d is sleeping\n", philo->current_time, philo->mutex.i_m);
 }
 void	ft_eat(t_philo *philo)
 {
-	gettimeofday(&philo->time_end, NULL);
-	philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
+		ft_current_time(philo);
+
 	usleep(philo->vars.t_to_eat);
-	printf("%d %d is eating.\n", philo->current_time, philo->mutex.i_m);
+	printf("%d %d is eating\n", philo->current_time, philo->mutex.i_m);
+	philo->vars.eat_per_phil--;
 	pthread_mutex_unlock(&philo->mutex.mutex_id);
 	if (philo->mutex.i_m == 1)
 		pthread_mutex_unlock(&(philo + (philo->vars.n_of_philo - 1))->mutex.mutex_id);
 	else
 		pthread_mutex_unlock(&(philo - 1)->mutex.mutex_id);
-	ft_sleep(philo);
 }
 void	*ft_life_cycle(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->mutex.mutex_id);
-	gettimeofday(&philo->time_end, NULL);
-	philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
-	printf("%d %d has taken a fork.\n", philo->current_time, philo->mutex.i_m);
-	if (philo->mutex.i_m == 1)
+	while (1)
 	{
-		pthread_mutex_lock(&(philo + (philo->vars.n_of_philo - 1))->mutex.mutex_id);
-		gettimeofday(&philo->time_end, NULL);
-		philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
-		printf("%d %d has taken a fork.\n", philo->current_time, philo->mutex.i_m);
+		if (philo->mutex.i_m != 1)
+		{
+				ft_current_time(philo);
+
+			printf("%d %d is thinking\n", philo->current_time, philo->mutex.i_m);
+		}
+		pthread_mutex_lock(&philo->mutex.mutex_id);
+			ft_current_time(philo);
+
+		printf("%d %d has taken a fork\n", philo->current_time, philo->mutex.i_m);
+		if (philo->mutex.i_m == 1)
+		{
+			pthread_mutex_lock(&(philo + (philo->vars.n_of_philo - 1))->mutex.mutex_id);
+				ft_current_time(philo);
+
+			printf("%d %d has taken a fork\n", philo->current_time, philo->mutex.i_m);
+		}
+		else
+		{
+			pthread_mutex_lock(&(philo - 1)->mutex.mutex_id);
+				ft_current_time(philo);
+
+			printf("%d %d has taken a fork\n", philo->current_time, philo->mutex.i_m);
+		}
+		ft_eat(philo);
+		if (philo->vars.eat_per_phil == 0)
+			break ;
+		ft_sleep(philo);
+		if (philo->mutex.i_m == 1)
+		{
+				ft_current_time(philo);
+
+			printf("%d %d is thinking\n", philo->current_time, philo->mutex.i_m);
+		}
 	}
-	else
-	{
-		pthread_mutex_lock(&(philo - 1)->mutex.mutex_id);
-		gettimeofday(&philo->time_end, NULL);
-		philo->current_time = (philo->time_end.tv_usec - philo->time_start.tv_usec) / 1000;
-		printf("%d %d has taken a fork.\n", philo->current_time, philo->mutex.i_m);
-	}
-	ft_eat(philo);
 	return (NULL);
 }
 
-void	ft_philo_cycle(t_philo *philo)
+int	ft_philo_cycle(t_philo *philo)
 {
 	int	i;
 
@@ -105,6 +127,18 @@ void	ft_philo_cycle(t_philo *philo)
 		pthread_create(&philo[i].thread, NULL, (void *)ft_life_cycle, &philo[i]);
 		i++;
 	}
+	i = 0;
+	while (i < philo->vars.n_of_philo)
+	{
+		while (1)
+		{
+			// if herhangi bir ölüm olursa bize hbarr et
+		}
+		pthread_join(philo[i].thread, NULL);
+
+		i++;
+	}
+	return (i);
 }
 
 int	main(int argc, char *argv[])
@@ -125,7 +159,7 @@ int	main(int argc, char *argv[])
 			return (write(2, "Mutex Error!\n", 13), 1);
 		}
 		ft_philo_cycle(philo);
-		usleep(3000000);
+		// eğer öldüyse dead yaz bitir
 		free(philo);
 	}
 	else
