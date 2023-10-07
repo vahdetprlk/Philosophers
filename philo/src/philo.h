@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
+/*   By: buryilma <buryilma@student.42kocaeli.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/07 14:36:47 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/07 18:42:05 by buryilma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ typedef struct s_die
 typedef struct s_mutex
 {
 	pthread_mutex_t	mutex_id;
+	pthread_mutex_t mutex_time;
+	pthread_mutex_t death_mutex;
+	pthread_mutex_t eat_mutex;
 	int				i_m;
 }	t_mutex;
 
@@ -51,8 +54,10 @@ typedef struct s_philo
 	t_time		starving_start;
 	t_time		starving_end;
 	int			current_time;
+	int			die_time;
 	int			is_eating;
 	int			is_died;
+	int 		flag;
 }	t_philo;
 
 void	*ft_calloc(size_t count, size_t size);
