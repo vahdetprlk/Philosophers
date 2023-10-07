@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/06 18:54:33 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/07 14:36:47 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_die
 typedef struct s_mutex
 {
 	pthread_mutex_t	mutex_id;
-	pthread_mutex_t time_mutex;
 	int				i_m;
 }	t_mutex;
 
