@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 15:52:23 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/08 19:56:25 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,6 +394,24 @@ int	ft_philo_cycle(t_philo *philo)
 	return (0);
 }
 
+int ft_init(t_philo *philo, t_vars vars)
+{
+	if (ft_mutex_init(philo, vars))
+	{
+		ft_destroy_mutex(philo);
+		free(philo);
+		return (write(2, "Mutex Error!\n", 13), 1);
+	}
+	if (ft_philo_cycle(philo) != 0)
+	{
+		ft_destroy_mutex(philo);
+		ft_detach_pthread(philo);
+		free (philo);
+		return (1);
+	}
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_philo	*philo;
@@ -406,19 +424,8 @@ int	main(int argc, char *argv[])
 		philo = (t_philo *)ft_calloc(vars.n_of_philo, sizeof(t_philo));
 		if (!philo)
 			return (write(2, "Malloc Error!\n", 14), 1);
-		if (ft_mutex_init(philo, vars))
-		{
-			ft_destroy_mutex(philo);
-			free(philo);
-			return (write(2, "Mutex Error!\n", 13), 1);
-		}
-		if (ft_philo_cycle(philo) != 0)
-		{
-			ft_destroy_mutex(philo);
-			ft_detach_pthread(philo);
-			free (philo);
+		if (ft_init(philo, vars) != 0)
 			return (1);
-		}
 		ft_destroy_mutex(philo);
 		free(philo);
 	}
