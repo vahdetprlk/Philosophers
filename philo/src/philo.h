@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 12:26:41 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/08 15:54:23 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,12 @@
 
 typedef struct timeval	t_time;
 
-typedef struct s_die
-{
-	int	i;
-	int	i_m;
-}	t_die;
-
 typedef struct s_mutex
 {
 	pthread_mutex_t	mutex_id;
-	pthread_mutex_t mutex_time;
-	pthread_mutex_t death_mutex;
-	pthread_mutex_t eat_mutex;
+	pthread_mutex_t	mutex_time;
+	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	eat_mutex;
 	int				i_m;
 }	t_mutex;
 
@@ -56,7 +50,6 @@ typedef struct s_philo
 	int			current_time;
 	int			die_time;
 	int			is_died;
-	int 		flag;
 }	t_philo;
 
 void	*ft_calloc(size_t count, size_t size);

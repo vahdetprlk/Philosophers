@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 14:15:23 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/08 15:52:23 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_init_vars(t_vars *vars, char **argv)
 	{
 		vars->eat_per_phil = ft_atoi(argv[4]);
 		if (vars->eat_per_phil < 0)
-			return (write(2, "N_of_t_each philo should at least 0.\n", 46), 1);
+			return (write(2, "N_of_t_each philo should at least 0.\n", 37), 1);
 	}
 	return (0);
 }
@@ -100,7 +100,6 @@ int	ft_mutex_init(t_philo *philo, t_vars vars_init)
 			return (1);
 		philo[i].mutex.i_m = (i + 1);
 		philo[i].vars = vars_init;
-		philo[i].flag = 1;
 		i++;
 	}
 	return (0);
@@ -167,7 +166,6 @@ int	ft_eat(t_philo *philo)
 	printf("%d %d is eating\n", philo->current_time, philo->mutex.i_m);
 	ft_usleep(philo->vars.t_to_eat);
 	gettimeofday(&philo->starving_start, NULL);
-
 	if (pthread_mutex_lock(&philo->mutex.eat_mutex) != 0)
 		return (write(2, "Mutex Error\n", 12));
 	philo->vars.eat_per_phil--;
@@ -199,6 +197,32 @@ int	ft_starve_time(t_philo *philo)
 	return (starve_time);
 }
 
+int	ft_died_set(t_philo *philo)
+{
+	if (pthread_mutex_lock(&philo->mutex.death_mutex) != 0)
+		return (write(2, "Mutex Error\n", 12));
+	philo->is_died = 1;
+	if (pthread_mutex_unlock(&philo->mutex.death_mutex) != 0)
+		return (write(2, "Mutex Error\n", 12));
+	return (0);
+}
+
+int	ft_died_eat_check(t_philo *philo, int i)
+{
+	if (pthread_mutex_lock(&philo->mutex.eat_mutex) != 0)
+		return (write(2, "Mutex Error\n", 12));
+	if (philo->vars.eat_per_phil != 0)
+	{
+		if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
+			return (write(2, "Mutex Error\n", 12));
+		printf("%d %d died\n", philo[i].die_time, philo[i].mutex.i_m);
+	}
+	else
+		if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
+			return (write(2, "Mutex Error\n", 12));
+	return (0);
+}
+
 int	ft_death_check(t_philo *philo)
 {
 	int	i;
@@ -211,37 +235,22 @@ int	ft_death_check(t_philo *philo)
 			i = 0;
 		if (ft_starve_time(&philo[i]) > philo[i].vars.t_to_die)
 		{
-
 			if (ft_die_time(&philo[i]) != 0)
 				return (write(2, "Mutex Error\n", 12));
-			j = 0;
-			while (j < philo->vars.n_of_philo)
+			j = -1;
+			while (++j < philo->vars.n_of_philo)
 			{
-				if (pthread_mutex_lock(&philo[j].mutex.death_mutex) != 0)
-					return (write(2, "Mutex Error\n", 12));
-				philo[j].is_died = 1;
-				if (pthread_mutex_unlock(&philo[j].mutex.death_mutex) != 0)
-					return (write(2, "Mutex Error\n", 12));
-				j++;
+				if (ft_died_set(&philo[j]) != 0)
+					return (1);
 			}
-			if (pthread_mutex_lock(&philo->mutex.eat_mutex) != 0)
-				return (write(2, "Mutex Error\n", 12));
-			if (philo->vars.eat_per_phil != 0)
-			{
-				if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
-					return (write(2, "Mutex Error\n", 12));
-				printf("%d %d died\n", philo[i].die_time, philo[i].mutex.i_m);
-			}
-			else
-				if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
-					return (write(2, "Mutex Error\n", 12));
+			if (ft_died_eat_check(philo, i) != 0)
+				return (1);
 			break ;
 		}
 		i++;
 	}
 	return (0);
 }
-
 
 int	ft_think(t_philo *philo)
 {
@@ -327,6 +336,24 @@ void	*ft_life_cycle(t_philo *philo)
 	return (NULL);
 }
 
+int	ft_create_thread_single(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	usleep(50);
+	while (i < philo->vars.n_of_philo)
+	{
+		usleep(10);
+		if (i % 2 == 1)
+			if (pthread_create(&philo[i].thread, NULL, (void *)ft_life_cycle,
+					&philo[i]))
+				return (write(2, "Thread Error!\n", 14));
+		i++;
+	}
+	return (0);
+}
+
 int	ft_create_thread(t_philo *philo)
 {
 	int	i;
@@ -344,17 +371,8 @@ int	ft_create_thread(t_philo *philo)
 				return (write(2, "Thread Error!\n", 14));
 		i++;
 	}
-	i = 0;
-	usleep(50);
-	while (i < philo->vars.n_of_philo)
-	{
-		usleep(10);
-		if (i % 2 == 1)
-			if (pthread_create(&philo[i].thread, NULL, (void *)ft_life_cycle,
-					&philo[i]))
-				return (write(2, "Thread Error!\n", 14));
-		i++;
-	}// buradan devam
+	if (ft_create_thread_single(philo) != 0)
+		return (1);
 	return (0);
 }
 
@@ -364,9 +382,9 @@ int	ft_philo_cycle(t_philo *philo)
 
 	if (ft_create_thread(philo) != 0)
 		return (1);
-	i = 0;
 	if (ft_death_check(philo) != 0)
 		return (1);
+	i = 0;
 	while (i < philo->vars.n_of_philo)
 	{
 		if (pthread_join(philo[i].thread, NULL) != 0)
