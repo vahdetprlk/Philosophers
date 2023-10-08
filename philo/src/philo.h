@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: buryilma <buryilma@student.42kocaeli.co    +#+  +:+       +#+        */
+/*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/07 18:42:05 by buryilma         ###   ########.fr       */
+/*   Updated: 2023/10/08 12:26:41 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_philo
 	t_time		starving_end;
 	int			current_time;
 	int			die_time;
-	int			is_eating;
 	int			is_died;
 	int 		flag;
 }	t_philo;
