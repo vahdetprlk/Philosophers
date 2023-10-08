@@ -6,17 +6,16 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 15:54:23 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/08 20:51:17 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <stddef.h>
 # include <pthread.h>
 # include <sys/time.h>
-# include <stdio.h> // silinecek
+# include <unistd.h>
 
 typedef struct timeval	t_time;
 
@@ -54,5 +53,20 @@ typedef struct s_philo
 
 void	*ft_calloc(size_t count, size_t size);
 int		ft_atoi(const char *str);
+
+int		ft_philo_cycle(t_philo *philo);
+void	*ft_life_cycle(t_philo *philo);
+
+int		ft_detach_pthread(t_philo *philo);
+
+int		ft_current_time(t_philo *philo);
+int		ft_die_time(t_philo *philo);
+int		ft_starve_time(t_philo *philo);
+void	ft_usleep(int time);
+
+int		ft_died_check(t_philo *philo);
+int		ft_died_eat_check(t_philo *philo, int i);
+int		ft_last_eat_check(t_philo *philo);
+
 
 #endif

@@ -2,10 +2,14 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -pthread
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -pthread
 
 SRC=	src/ft_atoi.c \
 		src/ft_calloc.c \
+		src/ft_life_cycle.c \
+		src/ft_mutex_check.c \
+		src/ft_philo_cycle.c \
+		src/ft_time.c \
  		src/philo.c
 
 OBJ = $(SRC:.c=.o)
