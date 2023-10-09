@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:02:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/09 18:39:53 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 19:12:16 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	ft_mutex_init(t_philo *philo, t_vars vars_init)
 		if (pthread_mutex_init(&philo[i].mutex.eat_mutex, NULL) != 0)
 			return (1);
 		philo[i].mutex.i_m = (i + 1);
+		philo[i].is_died = 0;
 		philo[i].vars = vars_init;
 		i++;
 	}
