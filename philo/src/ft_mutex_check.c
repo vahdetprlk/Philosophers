@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 20:53:28 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 13:31:49 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	ft_died_check(t_philo *philo)
 		return (write(2, "Mutex Error\n", 12));
 	return (0);
 }
-
 
 int	ft_died_eat_check(t_philo *philo, int i)
 {
