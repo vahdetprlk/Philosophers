@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/09 13:31:56 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 18:07:38 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_philo
 void	*ft_calloc(size_t count, size_t size);
 int		ft_atoi(const char *str);
 
-int		ft_philo_cycle(t_philo *philo);
+int		ft_philo_create(t_philo *philo);
 void	*ft_life_cycle(t_philo *philo);
 
 int		ft_detach_pthread(t_philo *philo);
@@ -65,7 +65,7 @@ int		ft_starve_time(t_philo *philo);
 void	ft_usleep(int time);
 
 int		ft_died_check(t_philo *philo);
-int		ft_died_eat_check(t_philo *philo, int i);
+int		ft_print_died(t_philo *philo, int i);
 int		ft_last_eat_check(t_philo *philo);
 
 #endif

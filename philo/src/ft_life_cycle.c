@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:21:40 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 20:52:50 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 18:38:57 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ static int	ft_sleep(t_philo *philo)
 
 static int	ft_eat(t_philo *philo)
 {
-	if (ft_died_check(philo) != 0)
-		return (1);
-	if (ft_current_time(philo) != 0)
+	if (ft_died_check(philo) != 0 || ft_current_time(philo) != 0)
 		return (1);
 	printf("%d %d is eating\n", philo->current_time, philo->mutex.i_m);
 	ft_usleep(philo->vars.t_to_eat);
@@ -81,9 +79,7 @@ static int	ft_fork_race(t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->mutex.mutex_id) != 0)
 		return (write(2, "Mutex Error\n", 12));
-	if (ft_current_time(philo) != 0)
-		return (1);
-	if (ft_died_check(philo) != 0)
+	if (ft_current_time(philo) != 0 || ft_died_check(philo) != 0)
 		return (1);
 	if (ft_fork_catch(philo) != 0)
 		return (1);

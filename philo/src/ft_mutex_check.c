@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/09 13:31:49 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 18:38:04 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_died_check(t_philo *philo)
 	return (0);
 }
 
-int	ft_died_eat_check(t_philo *philo, int i)
+int	ft_print_died(t_philo *philo, int i)
 {
 	if (pthread_mutex_lock(&philo->mutex.eat_mutex) != 0)
 		return (write(2, "Mutex Error\n", 12));

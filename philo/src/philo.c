@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:02:47 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 20:51:51 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 18:39:53 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	ft_init(t_philo *philo, t_vars vars)
 		free(philo);
 		return (write(2, "Mutex Error!\n", 13), 1);
 	}
-	if (ft_philo_cycle(philo) != 0)
+	if (ft_philo_create(philo) != 0)
 	{
 		ft_destroy_mutex(philo);
 		ft_detach_pthread(philo);

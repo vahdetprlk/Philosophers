@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:12:19 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/08 20:51:40 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/09 17:18:56 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	ft_died_set(t_philo *philo)
 	return (0);
 }
 
-static int	ft_death_check(t_philo *philo)
+static int	ft_starving_check(t_philo *philo)
 {
 	int	i;
 	int	j;
@@ -42,7 +42,7 @@ static int	ft_death_check(t_philo *philo)
 				if (ft_died_set(&philo[j]) != 0)
 					return (1);
 			}
-			if (ft_died_eat_check(philo, i) != 0)
+			if (ft_print_died(philo, i) != 0)
 				return (1);
 			break ;
 		}
@@ -51,7 +51,7 @@ static int	ft_death_check(t_philo *philo)
 	return (0);
 }
 
-static int	ft_create_thread_single(t_philo *philo)
+static int	ft_thread_create_single(t_philo *philo)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ static int	ft_create_thread_single(t_philo *philo)
 	return (0);
 }
 
-static int	ft_create_thread(t_philo *philo)
+static int	ft_thread_create(t_philo *philo)
 {
 	int	i;
 
@@ -86,18 +86,18 @@ static int	ft_create_thread(t_philo *philo)
 				return (write(2, "Thread Error!\n", 14));
 		i++;
 	}
-	if (ft_create_thread_single(philo) != 0)
+	if (ft_thread_create_single(philo) != 0)
 		return (1);
 	return (0);
 }
 
-int	ft_philo_cycle(t_philo *philo)
+int	ft_philo_create(t_philo *philo)
 {
 	int	i;
 
-	if (ft_create_thread(philo) != 0)
+	if (ft_thread_create(philo) != 0)
 		return (1);
-	if (ft_death_check(philo) != 0)
+	if (ft_starving_check(philo) != 0)
 		return (1);
 	i = 0;
 	while (i < philo->vars.n_of_philo)
