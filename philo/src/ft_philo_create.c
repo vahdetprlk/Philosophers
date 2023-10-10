@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:12:19 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/10 18:36:40 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 19:17:50 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@ static int	ft_died_set(t_philo *philo)
 		return (write(2, "Mutex Error\n", 12));
 	return (0);
 }
+
 int	ft_n_times_eat_check(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < philo->vars.n_of_philo)
 	{
 		if (pthread_mutex_lock(&philo[i].mutex.eat_mutex) != 0)
 			return (write(2, "Mutex Error\n", 12));
-		if(philo[i].vars.eat_per_phil != 0)
+		if (philo[i].vars.eat_per_phil != 0)
 		{
 			if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
 				return (write(2, "Mutex Error\n", 12));
@@ -41,8 +42,37 @@ int	ft_n_times_eat_check(t_philo *philo)
 			return (write(2, "Mutex Error\n", 12));
 		i++;
 	}
-	return(1);
+	return (1);
 }
+
+int	ft_starve_time_check(t_philo *philo, int i)
+{
+	int	j;
+
+	if (philo[i].vars.eat_per_phil != 0)
+	{
+		if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
+			return (write(2, "Mutex Error\n", 12));
+		if (ft_starve_time(&philo[i]) > philo[i].vars.t_to_die)
+		{
+			if (ft_die_time(&philo[i]) != 0)
+				return (write(2, "Mutex Error\n", 12));
+			j = -1;
+			while (++j < philo->vars.n_of_philo)
+			{
+				if (ft_died_set(&philo[j]) != 0)
+					return (1);
+			}
+			printf("%d %d died\n", philo[i].die_time, philo[i].mutex.i_m);
+			return (-1);
+		}
+	}
+	else
+		if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
+			return (write(2, "Mutex Error\n", 12));
+	return (0);
+}
+
 
 static int	ft_starving_check(t_philo *philo)
 {
@@ -50,35 +80,20 @@ static int	ft_starving_check(t_philo *philo)
 	int	j;
 
 	i = 0;
+	j = 0;
 	while (1)
 	{
 		if (philo->vars.n_of_philo == i)
 			i = 0;
 		if (pthread_mutex_lock(&philo[i].mutex.eat_mutex) != 0)
 			return (write(2, "Mutex Error\n", 12));
-		if (philo[i].vars.eat_per_phil != 0)
-		{
-			if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
-				return (write(2, "Mutex Error\n", 12));
-			if (ft_starve_time(&philo[i]) > philo[i].vars.t_to_die)
-			{
-				if (ft_die_time(&philo[i]) != 0)
-					return (write(2, "Mutex Error\n", 12));
-				j = -1;
-				while (++j < philo->vars.n_of_philo)
-				{
-					if (ft_died_set(&philo[j]) != 0)
-						return (1);
-				}
-				printf("%d %d died\n", philo[i].die_time, philo[i].mutex.i_m);
-				break ;
-			}
-		}
-		else
-			if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
-				return (write(2, "Mutex Error\n", 12));
+		j = ft_starve_time_check(philo, i);
+		if (j > 0)
+			return (1);
+		else if (j == -1)
+			break ;
 		if (ft_n_times_eat_check(philo) == 1)
-			break;
+			break ;
 		i++;
 	}
 	return (0);

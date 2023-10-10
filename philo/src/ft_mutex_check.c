@@ -6,12 +6,11 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/10 17:42:20 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 18:40:50 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdio.h>
 
 int	ft_died_check(t_philo *philo)
 {

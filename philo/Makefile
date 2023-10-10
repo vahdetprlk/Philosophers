@@ -2,7 +2,7 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -pthread
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=thread -pthread
 
 SRC=	src/ft_atoi.c \
 		src/ft_calloc.c \
