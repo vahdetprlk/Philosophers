@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/09 18:38:04 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 17:42:20 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,6 @@ int	ft_died_check(t_philo *philo)
 	}
 	if (pthread_mutex_unlock(&philo->mutex.death_mutex) != 0)
 		return (write(2, "Mutex Error\n", 12));
-	return (0);
-}
-
-int	ft_print_died(t_philo *philo, int i)
-{
-	if (pthread_mutex_lock(&philo->mutex.eat_mutex) != 0)
-		return (write(2, "Mutex Error\n", 12));
-	if (philo->vars.eat_per_phil != 0)
-	{
-		if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
-			return (write(2, "Mutex Error\n", 12));
-		printf("%d %d died\n", philo[i].die_time, philo[i].mutex.i_m);
-	}
-	else
-		if (pthread_mutex_unlock(&philo->mutex.eat_mutex) != 0)
-			return (write(2, "Mutex Error\n", 12));
 	return (0);
 }
 

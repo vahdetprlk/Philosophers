@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 17:32:03 by vparlak           #+#    #+#             */
-/*   Updated: 2023/09/25 17:32:04 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 16:21:04 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	ft_atoi(const char *str)
 	}
 	else if (*str == '+')
 		str++;
-	if (*str == '-' || *str == '+')
-		return (0);
+	if (*str == '-' || *str == '+' || !ft_isdigit(*str))
+		return (-1);
 	while (ft_isdigit(*str) == 1)
 	{
 		result = (result * 10) + (*str - '0');
