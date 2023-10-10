@@ -6,33 +6,21 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:42:05 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/10 19:47:39 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 20:18:40 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdio.h>
 
-int	ft_n_times_eat_check(t_philo *philo)
+static int	ft_died_set(t_philo *philo)
 {
-	int	i;
-
-	i = 0;
-	while (i < philo->vars.n_of_philo)
-	{
-		if (pthread_mutex_lock(&philo[i].mutex.eat_mutex) != 0)
-			return (write(2, "Mutex Error\n", 12));
-		if (philo[i].vars.eat_per_phil != 0)
-		{
-			if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
-				return (write(2, "Mutex Error\n", 12));
-			return (0);
-		}
-		if (pthread_mutex_unlock(&philo[i].mutex.eat_mutex) != 0)
-			return (write(2, "Mutex Error\n", 12));
-		i++;
-	}
-	return (1);
+	if (pthread_mutex_lock(&philo->mutex.death_mutex) != 0)
+		return (write(2, "Mutex Error\n", 12));
+	philo->is_died = 1;
+	if (pthread_mutex_unlock(&philo->mutex.death_mutex) != 0)
+		return (write(2, "Mutex Error\n", 12));
+	return (0);
 }
 
 int	ft_starve_time_check(t_philo *philo, int i)

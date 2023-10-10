@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:40:01 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/10 19:47:22 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/10 20:18:59 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,9 @@ int		ft_current_time(t_philo *philo);
 int		ft_die_time(t_philo *philo);
 int		ft_starve_time(t_philo *philo);
 void	ft_usleep(int time);
-int		ft_n_times_eat_check(t_philo *philo);
+
 int		ft_died_check(t_philo *philo);
 int		ft_last_eat_check(t_philo *philo);
 int		ft_starve_time_check(t_philo *philo, int i);
-int		ft_died_set(t_philo *philo);
 
 #endif
