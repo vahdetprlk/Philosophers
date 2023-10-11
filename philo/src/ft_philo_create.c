@@ -6,7 +6,7 @@
 /*   By: vparlak <vparlak@student.42kocaeli.com.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:12:19 by vparlak           #+#    #+#             */
-/*   Updated: 2023/10/10 20:17:12 by vparlak          ###   ########.fr       */
+/*   Updated: 2023/10/11 17:16:45 by vparlak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	ft_thread_create_single(t_philo *philo)
 		usleep(10);
 		if (i % 2 == 1)
 			if (pthread_create(&philo[i].thread, NULL, (void *)ft_life_cycle,
-					&philo[i]))
+					&philo[i]) != 0)
 				return (write(2, "Thread Error!\n", 14));
 		i++;
 	}
